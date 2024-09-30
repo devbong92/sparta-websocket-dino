@@ -1,21 +1,20 @@
 import { getHighScore, setHighScore } from '../models/rank.model.js';
-import handlerMappings from './handlerMapping.js';
 
 /**
  * 최고 점수 업데이트 핸들러
  * @param {*} userId
  * @param {*} payload
  */
-export const updateHighScore = (userId, payload) => {
+export const updateHighScore = async (userId, payload) => {
   console.log('updateHighScore =>>>> ', userId, payload);
 
-  const highScore = getHighScore();
+  const highScore = await getHighScore();
 
   if (highScore >= payload.currentScore) {
     return { status: 'fail', message: '최고점수 아님' };
   }
 
-  setHighScore(payload.currentScore);
+  Promise.all([setHighScore(payload.currentScore, userId)]);
 
   return {
     broadcast: true,
@@ -30,16 +29,18 @@ export const updateHighScore = (userId, payload) => {
  * 최고점수 초기화
  * @returns
  */
-export const initHighScore = () => {
-  let highScore = getHighScore();
+export const initHighScore = async () => {
+  let highScore = await getHighScore();
+
   if (!highScore) {
-    highScore = 0;
+    highScore = { score: 0 };
   }
 
   return {
     broadcast: true,
     handlerId: 50,
     status: 'success',
-    highScore: highScore,
+    highScore: highScore.score,
+    highScoreId: highScore.userId,
   };
 };

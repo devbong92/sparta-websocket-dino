@@ -6,7 +6,11 @@ import ItemController from './ItemController.js';
 import './Socket.js';
 import { sendEvent } from './Socket.js';
 
+import Ghost from './Ghost.js';
+
 import ITEM_UNLOCK from './assets/item_unlock.json' with { type: 'json' };
+
+const ghost_moves = [];
 
 const canvas = document.getElementById('game');
 const ctx = canvas.getContext('2d');
@@ -54,6 +58,8 @@ let cactiController = null;
 let itemController = null;
 let score = null;
 
+let ghost = null;
+
 let scaleRatio = null;
 let previousTime = null;
 let gameSpeed = GAME_SPEED_START;
@@ -74,6 +80,16 @@ function createSprites() {
   const groundHeightInGame = GROUND_HEIGHT * scaleRatio;
 
   player = new Player(
+    ctx,
+    playerWidthInGame,
+    playerHeightInGame,
+    minJumpHeightInGame,
+    maxJumpHeightInGame,
+    scaleRatio,
+  );
+
+  // player와 동일하기
+  ghost = new Ghost(
     ctx,
     playerWidthInGame,
     playerHeightInGame,
@@ -210,9 +226,13 @@ function gameLoop(currentTime) {
     itemController.update(gameSpeed, deltaTime);
     // 달리기
     player.update(gameSpeed, deltaTime);
+    ghost.update(gameSpeed, deltaTime);
     updateGameSpeed(deltaTime);
-
+    console.log('deltaTime =>>> ', deltaTime);
     score.update(deltaTime, itemController);
+  } else {
+    player.stop();
+    ghost.stop();
   }
 
   if (!gameover && cactiController.collideWith(player)) {
@@ -225,8 +245,10 @@ function gameLoop(currentTime) {
     score.getItem(collideWithItem.itemId);
   }
 
+  if (!gameover) ghost.draw(ghost_moves);
   // draw
-  player.draw();
+  player.draw(ghost_moves);
+
   cactiController.draw();
   ground.draw();
   score.draw();

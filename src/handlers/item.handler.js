@@ -7,11 +7,11 @@ import { getItemLog, setItemLog } from '../models/itemLog.model.js';
  * @param {*} payload
  * @returns
  */
-export const getItemHandler = (userId, payload) => {
+export const getItemHandler = async (userId, payload) => {
   console.log('getItemHandler =>>>> ', userId, payload);
 
   // 유저의 현재 아이템 이력 정보
-  let currentItemLog = getItemLog(userId);
+  let currentItemLog = await getItemLog(userId);
 
   if (!currentItemLog) {
     return { status: 'fail', message: '아이템 이력 없음 ' };

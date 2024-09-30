@@ -5,7 +5,7 @@ import { createStage } from '../models/stage.model.js';
 import { createItemLog } from '../models/itemLog.model.js';
 
 export const handleDisconnect = (socket, uuid) => {
-  removeUser(socket.id);
+  removeUser(socket.id, uuid);
   console.log(`User disconnected: ${socket.id}`);
   console.log('Current users :', getUser());
 };
@@ -14,7 +14,11 @@ export const handleConnection = (socket, uuid) => {
   console.log(`New user connected!! ${uuid} with Socket ID: ${socket.id}`);
   console.log(`Current users: `, getUser());
 
-  // 버전체크 ?
+  // 버전체크
+  if (!CLIENT_VERSION.includes(socket.handshake.query.clientVersion)) {
+    socket.emit('reponse', { status: 'fail', message: 'Client version mismatch' });
+    return;
+  }
 
   // 스테이지 초기화
   createStage(uuid);
@@ -36,7 +40,7 @@ export const handlerEvent = (io, socket, data) => {
   }
 
   const handler = handlerMappings[data.handlerId];
-  console.log(' helper.js - handler => ', handler);
+
   if (!handler) {
     socket.emit('reponse', { status: 'fail', message: 'Handler not found' });
     return;
@@ -49,8 +53,6 @@ export const handlerEvent = (io, socket, data) => {
     io.emit('response', response);
     return;
   }
-
-  console.log('helper.js -  response =>>> ', response);
 
   socket.emit('response', response);
 };

@@ -1,40 +1,60 @@
-const rank = {};
+import redisClient from '../init/redis.js';
+
+const HIGHSCORE_KEY_PREFIX = 'highscore:';
+const RANK_KEY_PREFIX = 'ranks:';
+const TTL = 60 * 60 * 24 * 7; // 7일
+
+// const rank = {};
 
 /**
  * 랭킹 초기화
  */
-export const initRank = () => {
-  rank['highScore'] = 0;
-  rank['list'] = [];
+export const initRank = async () => {
+  await redisClient.set(HIGHSCORE_KEY_PREFIX, JSON.stringify({ score: 0, userId: '' }), {
+    EX: TTL,
+  });
 };
 
 /**
  * 최고점수 조회
  * @returns highScore
  */
-export const getHighScore = () => {
-  return rank['highScore'];
+export const getHighScore = async () => {
+  // return rank['highScore'];
+  const highScore = await redisClient.get(HIGHSCORE_KEY_PREFIX);
+  return JSON.parse(highScore);
 };
 
 /**
  * 최고점수 저장
  * @param {number} score
  */
-export const setHighScore = (score) => {
-  rank['highScore'] = score;
+export const setHighScore = async (score, userId) => {
+  // rank['highScore'] = { score, userId };
+  await redisClient.set(HIGHSCORE_KEY_PREFIX, JSON.stringify({ score, userId }), { EX: TTL });
 };
 
 /**
  * 랭킹 리스트 조회
  * @returns
  */
-export const getRankList = () => {
-  return rank['list'];
+export const getRankList = async () => {
+  const arr = await redisClient.keys(RANK_KEY_PREFIX + '*');
+  const ranks = [];
+  if (arr) {
+    for (let tmp of arr) {
+      const res = await redisClient.get(tmp);
+      ranks.push(JSON.parse(res));
+    }
+  }
+  return ranks;
 };
 
 /**
  * 랭킹 리스트 저장
  */
-export const setRankList = (userId, score, timestamp) => {
-  rank['list'].push({ userId, score, timestamp });
+export const setRankList = async (userId, score, timestamp) => {
+  await redisClient.set(RANK_KEY_PREFIX + user.uuid, JSON.stringify({ userId, score, timestamp }), {
+    EX: TTL,
+  });
 };

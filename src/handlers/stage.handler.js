@@ -5,11 +5,11 @@ import { calculatorScore } from '../utils/score.util.js';
 
 // 유저는 스테이지를 하나씩 올라갈 수 있다. ( 1 -> 2, 2 -> 3 )
 // 유저는 일정 점수가 되면 다음 스테이지로 이동한다.
-export const moveStageHandler = (userId, payload) => {
+export const moveStageHandler = async (userId, payload) => {
   console.log('moveStageHandler =>>>> ', userId, payload);
 
   // 유저의 현재 스테이지 정보
-  let currentStages = getStage(userId);
+  let currentStages = await getStage(userId);
   if (!currentStages.length) {
     return { status: 'fail', message: 'No stages found for user' };
   }
@@ -29,7 +29,7 @@ export const moveStageHandler = (userId, payload) => {
   const currentStageData = stages.data.find((e) => e.id === currentStage.id);
 
   // 아이템 이력
-  const currentItemLogs = getItemLog(userId);
+  const currentItemLogs = await getItemLog(userId);
 
   let currentItemScore = 0;
   currentItemLogs.forEach((e) => {
@@ -59,7 +59,9 @@ export const moveStageHandler = (userId, payload) => {
    * 유저 스테이지 이력 기반으로 점수 누적 해서 계산
    */
   let currentStageItemScore = 0;
-  getItemLog(userId).forEach((e) => {
+  const itemLogs = await getItemLog(userId);
+
+  itemLogs.forEach((e) => {
     if (e.stageId === currentStage.id) {
       currentStageItemScore += e.itemScore;
     }
@@ -75,7 +77,7 @@ export const moveStageHandler = (userId, payload) => {
     return { status: 'fail', message: 'Target Stage not found' };
   }
 
-  setStage(userId, payload.targetStage, serverTime, payload.currentScore);
+  await setStage(userId, payload.targetStage, serverTime, payload.currentScore);
 
   return {
     status: 'success',

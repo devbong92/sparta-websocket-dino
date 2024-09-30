@@ -2,7 +2,7 @@ import { getStage, setStage, clearStage } from '../models/stage.model.js';
 import { getGameAssets } from '../init/assets.js';
 
 // 게임 시작
-export const gameStart = (uuid, payload) => {
+export const gameStart = async (uuid, payload) => {
   const { stages } = getGameAssets();
 
   // 기존 스테이지 정보 초기화
@@ -10,21 +10,20 @@ export const gameStart = (uuid, payload) => {
 
   // 첫번째 스테이지
   // * 본래 클라이언트에서 오는 데이터를 그대로 수용하는 경우는 없음, 하지만 개발편의를 위해서 이번은 이렇게 진행
-  setStage(uuid, stages.data[0].id, payload.timestamp, 0);
-  console.log('Stage : ', getStage(uuid));
+  await setStage(uuid, stages.data[0].id, payload.timestamp, 0);
 
   return { status: 'success' };
 };
 
 // 게임 종료
-export const gameEnd = (uuid, payload) => {
+export const gameEnd = async (uuid, payload) => {
   // 클라이언트는 게임 종료 시, 타임스탬프와 총 점수
 
   console.log('@@@@ GAME END ===>>> ', uuid, payload);
 
   // timestamp: gameEndTime timestamp를 gameEndTime으로 사용하겠다는 문법
   const { timestamp: gameEndTime, score } = payload;
-  const stages = getStage(uuid);
+  const stages = await getStage(uuid);
   if (!stages.length) {
     return { status: 'fail', message: 'No stages found for user' };
   }

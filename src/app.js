@@ -2,11 +2,15 @@ import express from 'express';
 import { createServer } from 'http'; // Node.js에서 기본제공
 import initSocket from './init/socket.js';
 import { loadGameAssets } from './init/assets.js';
+import dotenv from 'dotenv';
+import { initRedisClient } from './init/redis.js';
 
 const app = express();
 const server = createServer(app);
 
 const PORT = 3000;
+
+dotenv.config();
 
 app.use(express.json()); // json 파싱
 app.use(express.urlencoded({ extended: false })); // URL 인코딩, library 사용유무
@@ -27,6 +31,9 @@ server.listen(PORT, async () => {
     const assets = await loadGameAssets();
     console.log('Assets =>> ', assets);
     console.log('Assets loaded successfully');
+
+    // redis
+    await initRedisClient();
   } catch (e) {
     console.error('Failed to load game assets: ', e);
   }
