@@ -252,7 +252,7 @@ function gameLoop(currentTime) {
     score.getItem(collideWithItem.itemId);
   }
 
-  if (!gameover) ghost.draw(ghost_moves);
+  if (!gameover && !waitingToStart) ghost.draw(ghost_moves);
   // draw
   const coord = player.draw();
   player_coords.push(coord);
