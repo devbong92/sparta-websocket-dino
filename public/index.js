@@ -7,11 +7,9 @@ import './Socket.js';
 import { sendEvent } from './Socket.js';
 
 import Ghost from './Ghost.js';
-
 import ITEM_UNLOCK from './assets/item_unlock.json' with { type: 'json' };
 
 const ghost_moves = [];
-
 const player_coords = [];
 
 const canvas = document.getElementById('game');
@@ -61,6 +59,8 @@ let itemController = null;
 let score = null;
 
 let ghost = null;
+let isHighScore = false;
+let sendOverEvent = false;
 
 let scaleRatio = null;
 let previousTime = null;
@@ -178,6 +178,15 @@ function showStartGameText() {
   ctx.fillText('Tap Screen or Press Space To Start', x, y);
 }
 
+function showCongratulate() {
+  const img = new Image();
+  img.src = 'images/happy_rtan.gif';
+  const x = canvas.width / 2.3;
+  const y = canvas.height / 2;
+
+  ctx.drawImage(img, x, y, PLAYER_WIDTH, PLAYER_HEIGHT);
+}
+
 function updateGameSpeed(deltaTime) {
   gameSpeed += deltaTime * GAME_SPEED_INCREMENT;
 }
@@ -186,6 +195,8 @@ function reset() {
   hasAddedEventListenersForRestart = false;
   gameover = false;
   waitingToStart = false;
+
+  sendOverEvent = false;
 
   ground.reset();
   cactiController.reset();
@@ -244,7 +255,7 @@ function gameLoop(currentTime) {
   if (!gameover && cactiController.collideWith(player)) {
     gameover = true;
     // 게임종료 호출 및 내부에서 하이스코어 갱신 호출
-    score.setHighScore(player_coords);
+    isHighScore = score.setHighScore(player_coords);
     setupGameReset();
   }
   const collideWithItem = itemController.collideWith(player);
@@ -264,6 +275,19 @@ function gameLoop(currentTime) {
 
   if (gameover) {
     showGameOver();
+
+    if (!sendOverEvent) {
+      // 한번만 호출..!
+      sendEvent(3, {
+        score: score.score,
+        timestamp: Date.now(),
+      });
+      sendOverEvent = true;
+    }
+
+    if (isHighScore) {
+      showCongratulate();
+    }
   }
 
   if (waitingToStart) {

@@ -7,12 +7,12 @@ import { createItemLog } from '../models/itemLog.model.js';
 export const handleDisconnect = (socket, uuid) => {
   removeUser(socket.id, uuid);
   console.log(`User disconnected: ${socket.id}`);
-  console.log('Current users :', getUser());
+  // console.log('Current users :', getUser());
 };
 
 export const handleConnection = (socket, uuid) => {
   console.log(`New user connected!! ${uuid} with Socket ID: ${socket.id}`);
-  console.log(`Current users: `, getUser());
+  // console.log(`Current users: `, getUser());
 
   // 버전체크
   if (!CLIENT_VERSION.includes(socket.handshake.query.clientVersion)) {
@@ -30,7 +30,7 @@ export const handleConnection = (socket, uuid) => {
   socket.emit('connection', { uuid });
 };
 
-export const handlerEvent = (io, socket, data) => {
+export const handlerEvent = async (io, socket, data) => {
   console.log(' handler Event =>>> ', data);
 
   // 클라이언트 버전 확인
@@ -46,7 +46,9 @@ export const handlerEvent = (io, socket, data) => {
     return;
   }
 
-  const response = handler(data.userId, data.payload);
+  const response = await handler(data.userId, data.payload);
+
+  console.log('@@ handlerEvent - res =>>> ', response);
 
   // 브로드캐스트라면 io 사용
   if (response.broadcast) {

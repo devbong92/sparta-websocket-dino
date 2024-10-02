@@ -77,7 +77,9 @@ class Score {
         playerCoords: playerCoords,
         timestamp: Date.now(),
       });
+      return true;
     }
+    return false;
   }
 
   getScore() {
