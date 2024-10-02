@@ -1,4 +1,8 @@
-class Player {
+/**
+ * Player.js 와 거의 동일.
+ * - 이벤트 리스터 제거
+ */
+class Ghost {
   WALK_ANIMATION_TIMER = 200;
   walkAnimationTimer = this.WALK_ANIMATION_TIMER;
   dinoRunImages = [];
@@ -12,6 +16,7 @@ class Player {
   GRAVITY = 0.4;
 
   isMove = false;
+  idx = 0;
 
   // 생성자
   constructor(ctx, width, height, minJumpHeight, maxJumpHeight, scaleRatio) {
@@ -29,26 +34,26 @@ class Player {
     this.yStandingPosition = this.y;
 
     this.standingStillImage = new Image();
-    this.standingStillImage.src = 'images/standing_still.png';
+    this.standingStillImage.src = 'images/ghost_standing_still.png';
     this.image = this.standingStillImage;
 
     // 달리기
     const dinoRunImage1 = new Image();
-    dinoRunImage1.src = 'images/dino_run1.png';
+    dinoRunImage1.src = 'images/ghost_run1.png';
 
     const dinoRunImage2 = new Image();
-    dinoRunImage2.src = 'images/dino_run2.png';
+    dinoRunImage2.src = 'images/ghost_run2.png';
 
     this.dinoRunImages.push(dinoRunImage1);
     this.dinoRunImages.push(dinoRunImage2);
 
     // 키보드 설정
     // 등록된 이벤트가 있는 경우 삭제하고 다시 등록
-    window.removeEventListener('keydown', this.keydown);
-    window.removeEventListener('keyup', this.keyup);
+    // window.removeEventListener('keydown', this.keydown);
+    // window.removeEventListener('keyup', this.keyup);
 
-    window.addEventListener('keydown', this.keydown);
-    window.addEventListener('keyup', this.keyup);
+    // window.addEventListener('keydown', this.keydown);
+    // window.addEventListener('keyup', this.keyup);
   }
 
   keydown = (event) => {
@@ -124,13 +129,13 @@ class Player {
     this.isMove = false;
   }
 
-  draw() {
-    this.ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
-    return {
-      x: this.x,
-      y: this.y,
-    };
+  draw(ghost_moves) {
+    const move_log = ghost_moves[this.idx++];
+    if (move_log) {
+      const move = JSON.parse(move_log);
+      this.ctx.drawImage(this.image, move.x + 10, move.y + 10, this.width, this.height);
+    }
   }
 }
 
-export default Player;
+export default Ghost;

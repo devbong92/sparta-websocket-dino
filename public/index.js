@@ -12,6 +12,8 @@ import ITEM_UNLOCK from './assets/item_unlock.json' with { type: 'json' };
 
 const ghost_moves = [];
 
+const player_coords = [];
+
 const canvas = document.getElementById('game');
 const ctx = canvas.getContext('2d');
 
@@ -66,6 +68,10 @@ let gameSpeed = GAME_SPEED_START;
 let gameover = false;
 let hasAddedEventListenersForRestart = false;
 let waitingToStart = true;
+
+export function setGhostMoves(arr) {
+  ghost_moves.push(...arr);
+}
 
 function createSprites() {
   // 비율에 맞는 크기
@@ -228,7 +234,7 @@ function gameLoop(currentTime) {
     player.update(gameSpeed, deltaTime);
     ghost.update(gameSpeed, deltaTime);
     updateGameSpeed(deltaTime);
-    console.log('deltaTime =>>> ', deltaTime);
+
     score.update(deltaTime, itemController);
   } else {
     player.stop();
@@ -237,7 +243,8 @@ function gameLoop(currentTime) {
 
   if (!gameover && cactiController.collideWith(player)) {
     gameover = true;
-    score.setHighScore();
+    // 게임종료 호출 및 내부에서 하이스코어 갱신 호출
+    score.setHighScore(player_coords);
     setupGameReset();
   }
   const collideWithItem = itemController.collideWith(player);
@@ -247,7 +254,8 @@ function gameLoop(currentTime) {
 
   if (!gameover) ghost.draw(ghost_moves);
   // draw
-  player.draw(ghost_moves);
+  const coord = player.draw();
+  player_coords.push(coord);
 
   cactiController.draw();
   ground.draw();

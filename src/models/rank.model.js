@@ -1,6 +1,7 @@
 import redisClient from '../init/redis.js';
 
 const HIGHSCORE_KEY_PREFIX = 'highscore:';
+const HIGHSCORECOORDS_KEY_PREFIX = 'highscorecoords:';
 const RANK_KEY_PREFIX = 'ranks:';
 const TTL = 60 * 60 * 24 * 7; // 7일
 
@@ -25,13 +26,23 @@ export const getHighScore = async () => {
   return JSON.parse(highScore);
 };
 
+export const getHighScorerCoords = async () => {
+  // return rank['highScore'];
+  const coords = await redisClient.lRange(HIGHSCORECOORDS_KEY_PREFIX, 0, -1);
+  coords.forEach((e) => JSON.parse(e));
+  return coords;
+};
+
 /**
  * 최고점수 저장
  * @param {number} score
  */
-export const setHighScore = async (score, userId) => {
+export const setHighScore = async (score, userId, coords) => {
   // rank['highScore'] = { score, userId };
   await redisClient.set(HIGHSCORE_KEY_PREFIX, JSON.stringify({ score, userId }), { EX: TTL });
+  coords.forEach(async (e) => {
+    await redisClient.rPush(HIGHSCORECOORDS_KEY_PREFIX, JSON.stringify(e), { EX: TTL });
+  });
 };
 
 /**

@@ -1,4 +1,4 @@
-import { getHighScore, setHighScore } from '../models/rank.model.js';
+import { getHighScore, setHighScore, getHighScorerCoords } from '../models/rank.model.js';
 
 /**
  * 최고 점수 업데이트 핸들러
@@ -14,7 +14,7 @@ export const updateHighScore = async (userId, payload) => {
     return { status: 'fail', message: '최고점수 아님' };
   }
 
-  Promise.all([setHighScore(payload.currentScore, userId)]);
+  Promise.all([setHighScore(payload.currentScore, userId, payload.playerCoords)]);
 
   return {
     broadcast: true,
@@ -31,6 +31,7 @@ export const updateHighScore = async (userId, payload) => {
  */
 export const initHighScore = async () => {
   let highScore = await getHighScore();
+  let highScorerCoords = await getHighScorerCoords();
 
   if (!highScore) {
     highScore = { score: 0 };
@@ -42,5 +43,6 @@ export const initHighScore = async () => {
     status: 'success',
     highScore: highScore.score,
     highScoreId: highScore.userId,
+    highScorerCoords: highScorerCoords,
   };
 };

@@ -1,4 +1,5 @@
 import { CLIENT_VERSION } from './Constants.js';
+import { setGhostMoves } from './index.js';
 
 let userId = localStorage.getItem('userId');
 
@@ -16,6 +17,8 @@ socket.on('response', (data) => {
   if (data.broadcast && data.handlerId === 50) {
     // TODO: key값 상수로 빼기
     localStorage.setItem('highScore', Math.floor(data.highScore));
+
+    setGhostMoves(data.highScorerCoords);
     if (userId === data.highScoreId) {
       alert('랭킹 1위의 복귀를 환영합니다.');
     }

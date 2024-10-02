@@ -66,7 +66,7 @@ class Score {
     this.stage = 1;
   }
 
-  setHighScore() {
+  setHighScore(playerCoords) {
     const highScore = Number(localStorage.getItem(this.HIGH_SCORE_KEY));
     if (this.score > highScore) {
       localStorage.setItem(this.HIGH_SCORE_KEY, Math.floor(this.score));
@@ -74,6 +74,7 @@ class Score {
       sendEvent(50, {
         currentStageId: this.stageId,
         currentScore: this.score,
+        playerCoords: playerCoords,
         timestamp: Date.now(),
       });
     }
