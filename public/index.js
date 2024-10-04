@@ -53,9 +53,12 @@ const ITEM_CONFIG = [
 
 const bgm = new Audio('./audios/game_bgm.mp3');
 bgm.loop = true;
+bgm.volume = 0.1;
 
 const gameOverSound = new Audio('./audios/game_over.mp3');
 const newRecordSound = new Audio('./audios/game_over_new_record.mp3');
+gameOverSound.volume = 0.1;
+newRecordSound.volume = 0.1;
 
 // 게임 요소들
 let player = null;

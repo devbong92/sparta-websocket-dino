@@ -7,9 +7,9 @@ class Item {
     this.width = width;
     this.height = height;
     this.image = image;
+    this.getItemSound = new Audio('./audios/coin.mp3');
+    this.getItemSound.volume = 0.1;
   }
-
-  getItemSound = new Audio('./audios/coin.mp3');
 
   update(speed, gameSpeed, deltaTime, scaleRatio) {
     this.x -= speed * gameSpeed * deltaTime * scaleRatio;
