@@ -3,6 +3,7 @@ import { createClient } from 'redis';
 // redis[s]://[[username][:password]@][host][:port][/db-number]:
 let redisClient = createClient({
   url: process.env.REDIS_URL,
+  password: process.env.REDIS_PASSWORD,
 });
 
 export const initRedisClient = async () => {
