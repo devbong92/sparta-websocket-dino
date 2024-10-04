@@ -2,7 +2,7 @@ import Item from './Item.js';
 import { FIRST_STAGE_ID } from './Constants.js';
 
 class ItemController {
-  INTERVAL_MIN = 0;
+  INTERVAL_MIN = 3000;
   INTERVAL_MAX = 12000;
 
   nextInterval = null;

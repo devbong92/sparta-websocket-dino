@@ -23,7 +23,7 @@ export const getItemHandler = async (userId, payload) => {
 
   if (lastItemLog) {
     // 어뷰징 방지 :
-    // @TODO: 3초 - 수정 예정
+    // TODO: 3초 - 수정 예정
     if (Math.abs((payload.timestamp - lastItemLog.timestamp) / 1000) < 3) {
       return { status: 'fail', message: '어뷰징 의심 ' };
     }

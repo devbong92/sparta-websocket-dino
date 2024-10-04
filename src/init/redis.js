@@ -1,6 +1,9 @@
 import { createClient } from 'redis';
 
-let redisClient = createClient();
+// redis[s]://[[username][:password]@][host][:port][/db-number]:
+let redisClient = createClient({
+  url: process.env.REDIS_URL,
+});
 
 export const initRedisClient = async () => {
   redisClient.on('error', (err) => {
