@@ -1,6 +1,7 @@
 import { sendEvent } from './Socket.js';
 import itemsData from './assets/item.json' with { type: 'json' };
 import stageData from './assets/stage.json' with { type: 'json' };
+import { FIRST_STAGE_ID } from './Constants.js';
 
 const stageDataArr = stageData.data.sort((a, b) => a.id - b.id);
 
@@ -9,7 +10,7 @@ class Score {
   HIGH_SCORE_KEY = 'highScore';
   stageChange = true;
   stage = 1;
-  stageId = 1000;
+  stageId = FIRST_STAGE_ID;
 
   constructor(ctx, scaleRatio, itemController) {
     this.ctx = ctx;

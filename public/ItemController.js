@@ -1,4 +1,5 @@
 import Item from './Item.js';
+import { FIRST_STAGE_ID } from './Constants.js';
 
 class ItemController {
   INTERVAL_MIN = 0;
@@ -7,7 +8,7 @@ class ItemController {
   nextInterval = null;
   items = [];
 
-  currentStageId = 1000;
+  currentStageId = FIRST_STAGE_ID;
   itemUnlockData = null;
 
   constructor(ctx, itemImages, scaleRatio, speed, ITEM_UNLOCK) {
@@ -87,7 +88,7 @@ class ItemController {
 
   reset() {
     this.items = [];
-    this.currentStageId = 1000;
+    this.currentStageId = FIRST_STAGE_ID;
   }
 }
 

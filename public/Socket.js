@@ -18,7 +18,11 @@ socket.on('response', (data) => {
     // TODO: key값 상수로 빼기
     localStorage.setItem('highScore', Math.floor(data.highScore));
 
-    setGhostMoves(data.highScorerCoords);
+    console.log('data.highScorerCoords =>>> ', data.highScorerCoords);
+    if (data.highScorerCoords) {
+      setGhostMoves(data.highScorerCoords);
+    }
+
     if (userId === data.highScoreId) {
       alert('랭킹 1위의 복귀를 환영합니다.');
     }

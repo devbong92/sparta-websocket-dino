@@ -51,6 +51,12 @@ const ITEM_CONFIG = [
   { width: 50 / 1.5, height: 50 / 1.5, id: 6, image: 'images/items/pokeball_pink.png' },
 ];
 
+const bgm = new Audio('./audios/game_bgm.mp3');
+bgm.loop = true;
+
+const gameOverSound = new Audio('./audios/game_over.mp3');
+const newRecordSound = new Audio('./audios/game_over_new_record.mp3');
+
 // 게임 요소들
 let player = null;
 let ground = null;
@@ -202,7 +208,12 @@ function reset() {
   cactiController.reset();
   score.reset();
   gameSpeed = GAME_SPEED_START;
-  sendEvent(2, { timestamp: Date.now() });
+  sendEvent(2, { timestamp: Date.now() }); // 2: gameStart
+
+  // audio
+  newRecordSound.pause();
+  gameOverSound.pause();
+  bgm.play();
 }
 
 function setupGameReset() {
@@ -257,6 +268,14 @@ function gameLoop(currentTime) {
     // 게임종료 호출 및 내부에서 하이스코어 갱신 호출
     isHighScore = score.setHighScore(player_coords);
     setupGameReset();
+
+    bgm.pause();
+    bgm.currentTime = 0;
+    if (isHighScore) {
+      newRecordSound.play();
+    } else {
+      gameOverSound.play();
+    }
   }
   const collideWithItem = itemController.collideWith(player);
   if (collideWithItem && collideWithItem.itemId) {
