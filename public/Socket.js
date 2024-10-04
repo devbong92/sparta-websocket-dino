@@ -3,7 +3,7 @@ import { setGhostMoves } from './index.js';
 
 let userId = localStorage.getItem('userId');
 
-const socket = io('http://localhost:3000', {
+const socket = io('http://localhost:3001', {
   query: {
     clientVersion: CLIENT_VERSION, // connection 하는 순간에도 클라이언트버전체크를 위함
     userId,
