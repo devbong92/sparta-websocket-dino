@@ -12,7 +12,7 @@ const server = createServer(app);
 const PORT = 3001;
 
 // CORS
-const whitelist = ['http://localhost:3001'];
+const whitelist = ['http://localhost:3001', 'http://vamuzz.shop:3001', 'http://13.61.26.208:3001'];
 const corsOptions = {
   origin: function (origin, callback) {
     console.log(' origin ==.>> ', origin);
