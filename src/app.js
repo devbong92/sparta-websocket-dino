@@ -4,11 +4,26 @@ import initSocket from './init/socket.js';
 import { loadGameAssets } from './init/assets.js';
 import dotenv from 'dotenv';
 import { initRedisClient } from './init/redis.js';
+import cors from 'cors';
 
 const app = express();
 const server = createServer(app);
 
-const PORT = 3000;
+const PORT = 3001;
+
+// CORS
+const whitelist = ['http://localhost:3001'];
+const corsOptions = {
+  origin: function (origin, callback) {
+    if (!origin || whitelist.indexOf(origin) !== -1) {
+      // 만일 whitelist 배열에 origin인자가 있을 경우
+      callback(null, true); // cors 허용
+    } else {
+      callback(new Error('Not Allowed Origin!')); // cors 비허용
+    }
+  },
+};
+app.use(cors(corsOptions)); // 옵션을 추가한 CORS 미들웨어 추가
 
 dotenv.config();
 

@@ -213,6 +213,8 @@ function reset() {
   // audio
   newRecordSound.pause();
   gameOverSound.pause();
+  newRecordSound.currentTime = 0;
+  gameOverSound.currentTime = 0;
   bgm.play();
 }
 
@@ -271,6 +273,7 @@ function gameLoop(currentTime) {
 
     bgm.pause();
     bgm.currentTime = 0;
+
     if (isHighScore) {
       newRecordSound.play();
     } else {
