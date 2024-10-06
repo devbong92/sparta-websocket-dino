@@ -10,7 +10,8 @@ import Ghost from './Ghost.js';
 import ITEM_UNLOCK from './assets/item_unlock.json' with { type: 'json' };
 
 const ghost_moves = [];
-const player_coords = [];
+let player_coords = [];
+let isLoaded = false;
 
 const canvas = document.getElementById('game');
 const ctx = canvas.getContext('2d');
@@ -80,6 +81,14 @@ let waitingToStart = true;
 
 export function setGhostMoves(arr) {
   ghost_moves.push(...arr);
+}
+
+export function getIsLoaded() {
+  return isLoaded;
+}
+
+export function setIsLoaded(val) {
+  isLoaded = val;
 }
 
 function createSprites() {
@@ -182,9 +191,9 @@ function showStartGameText() {
   const fontSize = 40 * scaleRatio;
   ctx.font = `${fontSize}px Verdana`;
   ctx.fillStyle = 'grey';
-  const x = canvas.width / 14;
+  const x = canvas.width / 4;
   const y = canvas.height / 2;
-  ctx.fillText('Tap Screen or Press Space To Start', x, y);
+  ctx.fillText('Press Space To Start', x, y);
 }
 
 function showCongratulate() {
@@ -201,6 +210,10 @@ function updateGameSpeed(deltaTime) {
 }
 
 function reset() {
+  if (!isLoaded) {
+    return;
+  }
+
   hasAddedEventListenersForRestart = false;
   gameover = false;
   waitingToStart = false;
@@ -212,6 +225,8 @@ function reset() {
   score.reset();
   gameSpeed = GAME_SPEED_START;
   sendEvent(2, { timestamp: Date.now() }); // 2: gameStart
+
+  player_coords = [];
 
   // audio
   newRecordSound.pause();

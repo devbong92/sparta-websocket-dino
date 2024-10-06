@@ -18,6 +18,8 @@ class Ghost {
   isMove = false;
   idx = 0;
 
+  GHOST_INTERVAL = 5;
+
   // 생성자
   constructor(ctx, width, height, minJumpHeight, maxJumpHeight, scaleRatio) {
     this.ctx = ctx;
@@ -133,7 +135,13 @@ class Ghost {
     const move_log = ghost_moves[this.idx++];
     if (move_log) {
       const move = JSON.parse(move_log);
-      this.ctx.drawImage(this.image, move.x + 10, move.y + 10, this.width, this.height);
+      this.ctx.drawImage(
+        this.image,
+        move.x + this.GHOST_INTERVAL,
+        move.y + this.GHOST_INTERVAL,
+        this.width,
+        this.height,
+      );
     }
   }
 }

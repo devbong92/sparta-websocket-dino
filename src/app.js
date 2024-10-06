@@ -15,8 +15,6 @@ const PORT = 3001;
 const whitelist = ['http://localhost:3001', 'http://vamuzz.shop:3001', 'http://13.61.26.208:3001'];
 const corsOptions = {
   origin: function (origin, callback) {
-    console.log(' origin ==.>> ', origin);
-
     if (origin === undefined || whitelist.indexOf(origin) !== -1) {
       // 만일 whitelist 배열에 origin인자가 있을 경우
       callback(null, true); // cors 허용
