@@ -77,6 +77,7 @@ export const moveStageHandler = async (userId, payload) => {
     return { status: 'fail', message: 'Target Stage not found' };
   }
 
+  // 스테이지 정보 저장
   await setStage(userId, payload.targetStage, serverTime, payload.currentScore);
 
   return {

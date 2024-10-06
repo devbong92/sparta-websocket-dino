@@ -8,12 +8,14 @@ import { getHighScore, setHighScore, getHighScorerCoords } from '../models/rank.
 export const updateHighScore = async (userId, payload) => {
   console.log('updateHighScore =>>>> ', userId, payload);
 
+  // 최고점수 조회
   const highScore = await getHighScore();
 
   if (highScore >= payload.currentScore) {
     return { status: 'fail', message: '최고점수 아님' };
   }
 
+  // 최고점수 저장
   Promise.all([setHighScore(payload.currentScore, userId, payload.playerCoords)]);
 
   return {

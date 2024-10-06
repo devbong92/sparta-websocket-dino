@@ -4,14 +4,18 @@ const KEY_PREFIX = 'itemLogs:';
 const TTL = 60 * 60 * 24 * 7; // 7일
 
 /**
- * 유저별 : 아이템 이력 관리
+ * 유저별 아이템 이력 데이터 생성
+ * @param {*} uuid
  */
-// const itemLog = {};
-
 export const createItemLog = (uuid) => {
   clearItemLog(uuid);
 };
 
+/**
+ * 아이템 이력 데이터 조회
+ * @param {*} uuid
+ * @returns
+ */
 export const getItemLog = async (uuid) => {
   // return itemLog[uuid];
   let res = await redisClient.lRange(KEY_PREFIX + uuid, 0, -1);
@@ -19,6 +23,14 @@ export const getItemLog = async (uuid) => {
   return res;
 };
 
+/**
+ * 아이템 이력 저장
+ * @param {*} uuid
+ * @param {*} stageId
+ * @param {*} itemId
+ * @param {*} itemScore
+ * @param {*} timestamp
+ */
 export const setItemLog = async (uuid, stageId, itemId, itemScore, timestamp) => {
   await redisClient.rPush(
     KEY_PREFIX + uuid,
@@ -27,6 +39,10 @@ export const setItemLog = async (uuid, stageId, itemId, itemScore, timestamp) =>
   );
 };
 
+/**
+ * 아이템 이력 초기화
+ * @param {*} uuid
+ */
 export const clearItemLog = (uuid) => {
   redisClient.del(KEY_PREFIX + uuid);
 };

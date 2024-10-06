@@ -38,6 +38,7 @@ export const getItemHandler = async (userId, payload) => {
     return { status: 'fail', message: '해당 스테이지에서 얻을 수 없는 아이템 정보' };
   }
 
+  // 아이템 이력 저장
   setItemLog(userId, payload.currentStageId, payload.itemId, payload.itemScore, payload.timestamp);
 
   return { status: 'success', message: `get Item ${payload.itemId} +${payload.itemScore}` };

@@ -32,7 +32,7 @@ server.listen(PORT, async () => {
     console.log('Assets =>> ', assets);
     console.log('Assets loaded successfully');
 
-    // redis
+    // redis 설정
     await initRedisClient();
   } catch (e) {
     console.error('Failed to load game assets: ', e);

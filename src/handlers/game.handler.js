@@ -9,7 +9,7 @@ export const gameStart = async (uuid, payload) => {
   // 기존 스테이지 정보 초기화
   clearStage(uuid);
 
-  // 첫번째 스테이지
+  // * 첫번째 스테이지
   // * 본래 클라이언트에서 오는 데이터를 그대로 수용하는 경우는 없음, 하지만 개발편의를 위해서 이번은 이렇게 진행
   await setStage(uuid, stages.data[0].id, payload.timestamp, 0);
 
