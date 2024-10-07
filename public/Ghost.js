@@ -137,8 +137,8 @@ class Ghost {
       const move = JSON.parse(move_log);
       this.ctx.drawImage(
         this.image,
-        move.x + this.GHOST_INTERVAL,
-        move.y + this.GHOST_INTERVAL,
+        (move.x + this.GHOST_INTERVAL) * this.scaleRatio,
+        (move.y + this.GHOST_INTERVAL) * this.scaleRatio,
         this.width,
         this.height,
       );

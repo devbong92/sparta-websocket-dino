@@ -127,8 +127,8 @@ class Player {
   draw() {
     this.ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
     return {
-      x: this.x,
-      y: this.y,
+      x: this.x / this.scaleRatio,
+      y: this.y / this.scaleRatio,
     };
   }
 }
