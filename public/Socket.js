@@ -24,11 +24,12 @@ socket.on('response', (data) => {
       setGhostMoves(data.highScorerCoords);
     }
 
+    let displayStr = '웰컴투 다이노 월드!!!';
     if (userId === data.highScoreId) {
-      let innerText = document.getElementById('display-contents').innerText;
-      document.getElementById('display-contents').innerText =
-        innerText + '  랭킹 1위의 복귀를 환영합니다.';
+      displayStr += '  랭킹 1위의 복귀를 환영합니다.';
     }
+
+    document.getElementById('display-contents').innerText = displayStr;
 
     setIsLoaded(true);
   }
