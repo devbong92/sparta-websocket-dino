@@ -12,6 +12,7 @@ import ITEM_UNLOCK from './assets/item_unlock.json' with { type: 'json' };
 const ghost_moves = [];
 let player_coords = [];
 let isLoaded = false;
+let isAddEvent = false;
 
 const canvas = document.getElementById('game');
 const ctx = canvas.getContext('2d');
@@ -341,4 +342,10 @@ function gameLoop(currentTime) {
 // 게임 프레임을 다시 그리는 메서드
 requestAnimationFrame(gameLoop);
 
-window.addEventListener('keyup', reset, { once: true });
+window.addEventListener('keyup', (event) => {
+  console.log('assd => ', event.key);
+  if (isLoaded && !isAddEvent) {
+    window.addEventListener('keyup', reset, { once: true });
+    isAddEvent = true;
+  }
+});
