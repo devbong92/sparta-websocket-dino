@@ -342,8 +342,8 @@ function gameLoop(currentTime) {
 // 게임 프레임을 다시 그리는 메서드
 requestAnimationFrame(gameLoop);
 
+// 화면 로딩을 위한 처리
 window.addEventListener('keyup', (event) => {
-  console.log('assd => ', event.key);
   if (isLoaded && !isAddEvent) {
     window.addEventListener('keyup', reset, { once: true });
     isAddEvent = true;
